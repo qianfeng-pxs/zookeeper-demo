@@ -20,7 +20,18 @@ public class zkClientTest {
             @Override
             public void process(WatchedEvent watchedEvent) {
                 // 收到事件通知后的回调函数（用户的业务逻辑）
-//                System.out.println(watchedEvent.getType() + "--" + watchedEvent.getPath());
+                System.out.println(watchedEvent.getType() + "--" + watchedEvent.getPath());
+                //获取子节点并监听节点变化
+                System.out.println("------------------------");
+                try {
+                    List<String> children = zkClient.getChildren("/", true);
+                    for (String child : children) {
+                        System.out.println("监听到子节点"+child);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                System.out.println("------------------------");
             }
         });
     }
@@ -48,6 +59,12 @@ public class zkClientTest {
     public void ifExist() throws Exception {
         Stat stat = zkClient.exists("/pxs", false);
         System.out.println(stat == null ? "not exist" : "exist");
+    }
+
+    @Test
+    public void watchChange() throws Exception {
+        // 延时阻塞，使程序不退出
+        Thread.sleep(Long.MAX_VALUE);
     }
 
 
